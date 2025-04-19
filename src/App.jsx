@@ -12,7 +12,7 @@ function App() {
 		</div>
 	);
 	// this is my change
-	// new
+	// new line
 }
 
 export default App;
