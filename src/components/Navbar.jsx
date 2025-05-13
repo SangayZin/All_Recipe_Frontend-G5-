@@ -4,50 +4,34 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   return (
-    <nav className="bg-white shadow-md py-4 px-6">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
-        {/* Logo */}
-        <Link to="/" className="text-2xl font-bold text-red-600">Allrecipes</Link>
-        
-        {/* Main Navigation */}
-        <div className="hidden md:flex space-x-6">
-          <div className="group relative">
-            <button className="font-semibold hover:text-red-600">MEALS</button>
-            {/* Dropdown would go here */}
-          </div>
-          <div className="group relative">
-            <button className="font-semibold hover:text-red-600">INGREDIENTS</button>
-          </div>
-          <div className="group relative">
-            <button className="font-semibold hover:text-red-600">OCCASIONS</button>
-          </div>
-          <div className="group relative">
-            <button className="font-semibold hover:text-red-600">CUISINES</button>
-          </div>
-          <div className="group relative">
-            <button className="font-semibold hover:text-red-600">KITCHEN TIPS</button>
-          </div>
-          <div className="group relative">
-            <button className="font-semibold hover:text-red-600">NEWS</button>
-          </div>
+    <div className="w-full">
+      <header className="px-4 pt-4">
+        <div className="flex justify-between items-center mb-3">
+          <h1 className="text-3xl font-bold text-red-500">allrecipes</h1>
         </div>
-        
-        {/* Right-side links */}
-        <div className="hidden md:flex space-x-6 items-center">
-          <button className="font-semibold hover:text-red-600">Log In</button>
-          <button className="font-semibold hover:text-red-600">Magazine</button>
-          <button className="font-semibold hover:text-red-600">Newsletters</button>
-          <button className="font-semibold hover:text-red-600">Sweepstakes</button>
-        </div>
-        
-        {/* Mobile menu button */}
-        <button className="md:hidden text-gray-600">
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
-        </button>
-      </div>
-    </nav>
+      </header>
+
+      <nav className="px-4 py-3 flex space-x-6 overflow-x-auto bg-white border-y border-gray-200">
+        <Link to="/meals" className="whitespace-nowrap font-medium text-gray-800 hover:text-red-500 text-sm">
+          MEALS
+        </Link>
+        <Link to="/ingredients" className="whitespace-nowrap font-medium text-gray-800 hover:text-red-500 text-sm">
+          INGREDIENTS
+        </Link>
+        <Link to="/occasions" className="whitespace-nowrap font-medium text-gray-800 hover:text-red-500 text-sm">
+          OCCASIONS
+        </Link>
+        <Link to="/cuisines" className="whitespace-nowrap font-medium text-gray-800 hover:text-red-500 text-sm">
+          CUISINES
+        </Link>
+        <Link to="/kitchen-tips" className="whitespace-nowrap font-medium text-gray-800 hover:text-red-500 text-sm">
+          KITCHEN TIPS
+        </Link>
+        <Link to="/news" className="whitespace-nowrap font-medium text-gray-800 hover:text-red-500 text-sm">
+          NEWS
+        </Link>
+      </nav>
+    </div>
   );
 };
 
