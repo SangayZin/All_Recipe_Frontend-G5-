@@ -1,6 +1,5 @@
 // src/components/Navbar.jsx
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   return (
@@ -11,25 +10,43 @@ const Navbar = () => {
         </div>
       </header>
 
-      <nav className="px-4 py-3 flex space-x-6 overflow-x-auto bg-white border-y border-gray-200">
-        <Link to="/meals" className="whitespace-nowrap font-medium text-gray-800 hover:text-red-500 text-sm">
-          MEALS
-        </Link>
-        <Link to="/ingredients" className="whitespace-nowrap font-medium text-gray-800 hover:text-red-500 text-sm">
+      <nav className="px-4 py-3 flex space-x-6 overflow-x-auto bg-white border-y border-gray-200 relative">
+        {/* MEALS Dropdown */}
+        <div className="relative group">
+          <span
+            className="whitespace-nowrap font-medium text-gray-600 hover:text-red-500 text-sm cursor-pointer"
+          >
+            MEALS
+          </span>
+          <div className="absolute left-0 mt-2 hidden group-hover:flex flex-col bg-white border border-gray-200 rounded shadow-lg z-10 min-w-[150px]">
+            <div className="px-4 py-2 text-sm text-gray-700 hover:bg-red-50">
+              Breakfast
+            </div>
+            <div className="px-4 py-2 text-sm text-gray-700 hover:bg-red-50">
+              Lunch
+            </div>
+            <div className="px-4 py-2 text-sm text-gray-700 hover:bg-red-50">
+              Dinner
+            </div>
+          </div>
+        </div>
+
+        {/* Other static nav items */}
+        <span className="whitespace-nowrap font-medium text-gray-600 hover:text-red-500 text-sm cursor-pointer">
           INGREDIENTS
-        </Link>
-        <Link to="/occasions" className="whitespace-nowrap font-medium text-gray-800 hover:text-red-500 text-sm">
+        </span>
+        <span className="whitespace-nowrap font-medium text-gray-600 hover:text-red-500 text-sm cursor-pointer">
           OCCASIONS
-        </Link>
-        <Link to="/cuisines" className="whitespace-nowrap font-medium text-gray-800 hover:text-red-500 text-sm">
+        </span>
+        <span className="whitespace-nowrap font-medium text-gray-600 hover:text-red-500 text-sm cursor-pointer">
           CUISINES
-        </Link>
-        <Link to="/kitchen-tips" className="whitespace-nowrap font-medium text-gray-800 hover:text-red-500 text-sm">
+        </span>
+        <span className="whitespace-nowrap font-medium text-gray-600 hover:text-red-500 text-sm cursor-pointer">
           KITCHEN TIPS
-        </Link>
-        <Link to="/news" className="whitespace-nowrap font-medium text-gray-800 hover:text-red-500 text-sm">
+        </span>
+        <span className="whitespace-nowrap font-medium text-gray-600 hover:text-red-500 text-sm cursor-pointer">
           NEWS
-        </Link>
+        </span>
       </nav>
     </div>
   );
