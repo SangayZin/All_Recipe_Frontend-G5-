@@ -1,28 +1,99 @@
-// components/Modal.js
+import React from 'react';
+import Modal from 'react-modal';
+import { Heart } from 'lucide-react'; // For the favorite icon
 
-const Modal = ({ recipe, onClose }) => {
-    if (!recipe) return null;
-  
-    return (
-      <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-        <div className="bg-white p-6 rounded-lg shadow-lg w-[400px] max-w-full">
-          <h3 className="text-2xl font-bold">{recipe.title}</h3>
+// Recommended: Set this in your root index.js instead
+Modal.setAppElement('#root'); 
+
+const RecipeModal = ({ recipe, onClose, onLike, isFavorite }) => {
+  if (!recipe) return null;
+
+  return (
+    <Modal
+      isOpen={!!recipe}
+      onRequestClose={onClose}
+      style={{
+        overlay: {
+          backgroundColor: 'rgba(0, 0, 0, 0.75)',
+          zIndex: 1000,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        },
+        content: {
+          position: 'relative',
+          inset: 'auto',
+          maxWidth: '800px',
+          width: '90%',
+          padding: '0',
+          borderRadius: '12px',
+          border: 'none',
+          boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)'
+        }
+      }}
+    >
+      <div className="flex flex-col md:flex-row bg-white">
+        {/* Image Section */}
+        <div className="md:w-1/2 h-64 md:h-96 bg-gray-100 relative">
           <img
-            src={recipe.imageUrl}
+            src={recipe.imageUrl || '/placeholder-food.jpg'}
             alt={recipe.title}
-            className="w-full h-40 object-cover rounded-md mt-4"
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.src = '/placeholder-food.jpg';
+            }}
           />
-          <p className="mt-4">{recipe.description}</p>
+        </div>
+
+        {/* Content Section */}
+        <div className="md:w-1/2 p-6">
           <button
             onClick={onClose}
-            className="mt-4 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl bg-white rounded-full w-8 h-8 flex items-center justify-center"
           >
-            Close
+            &times;
           </button>
+
+          <h2 className="text-2xl font-bold mb-3 text-gray-800">{recipe.title}</h2>
+          <p className="text-gray-600 mb-6">{recipe.description}</p>
+
+          <button
+            onClick={() => onLike(recipe.title)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full ${
+              isFavorite 
+                ? 'bg-red-100 text-red-600' 
+                : 'bg-gray-100 text-gray-800'
+            }`}
+          >
+            <Heart fill={isFavorite ? 'currentColor' : 'none'} size={18} />
+            {isFavorite ? 'Saved' : 'Save Recipe'}
+          </button>
+
+          <div className="mt-8 pt-5 border-t border-gray-200">
+            <h3 className="font-medium mb-3">Recipe Details</h3>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <p className="text-gray-500">Category</p>
+                <p>Main Dish</p>
+              </div>
+              <div>
+                <p className="text-gray-500">Prep Time</p>
+                <p>15 mins</p>
+              </div>
+              <div>
+                <p className="text-gray-500">Cook Time</p>
+                <p>30 mins</p>
+              </div>
+              <div>
+                <p className="text-gray-500">Servings</p>
+                <p>4 people</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    );
-  };
-  
-  export default Modal;
-  
+    </Modal>
+  );
+};
+
+export default RecipeModal;
