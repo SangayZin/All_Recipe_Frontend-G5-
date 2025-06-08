@@ -1,4 +1,4 @@
-# ALL_RECIPE_FRONTEND-G5-
+# ALL_RECIPE
 
 ## Project Proposal
 
@@ -6,16 +6,15 @@
 The aim of this project is to develop **ALL_RECIPE**, a modern, user-friendly web application for discovering, searching, and managing recipes. The objective is to provide users with an intuitive platform to explore a wide variety of recipes, search by ingredients or names, and view detailed instructions and images.
 
 ### Feasibility 
-The project is feasible within the given timeframe and resources. We used React (or Next.js) for the frontend, leveraging open-source libraries such as Tailwind CSS and lucide-react for UI and icons. The modular component-based architecture ensures scalability and maintainability. Collaboration will be facilitated via GitHub.
+The project is feasible within the given timeframe and resources. We used React for the frontend, leveraging open-source libraries such as Tailwind CSS and lucide-react for UI and icons. The modular component-based architecture ensures scalability and maintainability. Collaboration is facilitated via GitHub.  
 
 ### Expected Outcome 
 - A fully functional, responsive recipe web application with:
-- A searchable recipe database
-- Detailed recipe pages with images and instructions
-- A clean, modern UI that works on both desktop and mobile devices
-- Well-documented codebase and components, enabling easy maintenance and future enhancements
+  - A searchable recipe database
+  - Detailed recipe pages with images and instructions
+  - A clean, modern UI that works on both desktop and mobile devices
+  - Well-documented codebase and components, enabling easy maintenance and future enhancements
 
----
 
 ## Project Planning
 
@@ -41,6 +40,7 @@ We have chosen to develop a **recipe discovery and management application**. Thi
 ### Prerequisites
 - [Node.js](https://nodejs.org/) (v16 or higher)
 - [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+- (Optional for backend) [Prisma](https://www.prisma.io/) for database ORM
 
 ### Setup Instructions
 
@@ -59,9 +59,9 @@ We have chosen to develop a **recipe discovery and management application**. Thi
 
 3. **Start the development server:**
    ```bash
-   npm start
+   npm run dev
    # or
-   yarn start
+   yarn dev
    ```
 
 4. **Open your browser:**
@@ -82,7 +82,34 @@ src/
   assets/          # Images and static files
   App.jsx          # Main app component
   index.js         # Entry point
+lib/
+  utils.js         # Utility functions
+contexts/
+  authContext.js   # Authentication context
 ```
+
+---
+
+## What Has Been Done
+
+- **Frontend Setup:** React with Vite, Tailwind CSS, DaisyUI, and lucide-react for icons.
+- **Routing:** React Router DOM for navigation.
+- **State Management:** React hooks and context for authentication.
+- **API Integration:** Axios for HTTP requests.
+- **UI Components:** Sidebar, SearchBar, RecipeList, RecipeCard, Modal, FavoritesToggle, Button.
+- **Responsive Design:** Tailwind CSS utilities for mobile and desktop layouts.
+- **Testing & Dev Tools:** React Query and React Query Devtools for data fetching and debugging.
+- **Authentication:** Context-based authentication setup.
+- **Collaboration:** GitHub repository for version control and team collaboration.
+- **(Optional/If applicable) Prisma:** If a backend is used, Prisma ORM can be set up for database management.  
+  - To initialize Prisma (if backend exists):
+    ```bash
+    npx prisma init
+    ```
+  - Define your schema in `prisma/schema.prisma` and run:
+    ```bash
+    npx prisma migrate dev --name init
+    ```
 
 ---
 
@@ -99,29 +126,48 @@ src/
 ### SearchBar
 - **Purpose:** Allows users to search for recipes or ingredients
 - **Props:**
-  - `onSearch` (function): Callback when a search is submitted
-  - `placeholder` (string): Placeholder text for the input
+  - `searchQuery` (string): The current search query
+  - `onSearchChange` (function): Callback when the search input changes
 - **Usage:**
   ```jsx
-  <SearchBar onSearch={handleSearch} placeholder="Search recipes..." />
+  <SearchBar searchQuery={search} onSearchChange={setSearch} />
   ```
 
 ### RecipeList
 - **Purpose:** Displays a list of recipes
 - **Props:**
   - `recipes` (array): Array of recipe objects
+  - `onClick` (function): Handler for viewing a recipe
+  - `onLike` (function): Handler for liking a recipe
+  - `favorites` (array): List of favorite recipe titles
 - **Usage:**
   ```jsx
-  <RecipeList recipes={recipes} />
+  <RecipeList recipes={recipes} onClick={handleViewRecipe} onLike={handleLike} favorites={favorites} />
   ```
 
-### RecipeDetails
-- **Purpose:** Shows detailed information about a selected recipe
+### RecipeCard
+- **Purpose:** Displays a single recipe card with image, title, description, and actions
 - **Props:**
-  - `recipe` (object): The selected recipe object
+  - `title`, `description`, `imageUrl`, `onClick`, `onLike`, `isLiked`
 - **Usage:**
   ```jsx
-  <RecipeDetails recipe={selectedRecipe} />
+  <RecipeCard title="Ema Datsi" description="A national Bhutanese dish..." imageUrl="..." onClick={...} onLike={...} isLiked={...} />
+  ```
+
+### Modal
+- **Purpose:** Shows recipe details in a modal dialog
+- **Props:** `recipe`, `onClose`, `onLike`, `isFavorite`
+- **Usage:**
+  ```jsx
+  <RecipeModal recipe={selectedRecipe} onClose={closeModal} onLike={handleLike} isFavorite={...} />
+  ```
+
+### FavoritesToggle
+- **Purpose:** Toggle between all recipes and favorite recipes
+- **Props:** `onToggle`, `showFavorites`
+- **Usage:**
+  ```jsx
+  <FavoritesToggle onToggle={toggleFavorites} showFavorites={showFavorites} />
   ```
 
 ---
@@ -147,3 +193,4 @@ This project is licensed under the MIT License.
 - [React](https://reactjs.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [lucide-react](https://lucide.dev/)
+- [Prisma](https://www.prisma.io/) (if backend is used)
