@@ -1,3 +1,4 @@
+// Color utilities
 const COLORS = {
 	green: {
 		bg: "bg-[#ECF7D4]",
@@ -14,8 +15,17 @@ const COLORS = {
 };
 
 export const getRandomColor = () => {
-	const colorNames = Object.keys(COLORS); // Get array of the keys (color names)
-	const randomIndex = Math.floor(Math.random() * colorNames.length); // Get a random index
-	const randomColorName = colorNames[randomIndex]; // Get the color name at the random index
-	return COLORS[randomColorName]; // Return the color object corresponding to the random color name
+	const colorNames = Object.keys(COLORS);
+	const randomIndex = Math.floor(Math.random() * colorNames.length);
+	const randomColorName = colorNames[randomIndex];
+	return COLORS[randomColorName];
 };
+
+// Image upload utility (placeholder version)
+export async function uploadImage(file) {
+	// Placeholder logic (you can implement your own image upload here)
+	console.warn("uploadImage is disabled: Supabase has been removed.");
+
+	// Return a dummy image URL or throw an error
+	return Promise.resolve("https://via.placeholder.com/300x200.png?text=No+Upload");
+}

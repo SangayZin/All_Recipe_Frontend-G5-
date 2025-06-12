@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { LogIn, Home } from "lucide-react";
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -6,6 +6,7 @@ import RecipeList from "../components/RecipeList";
 import SearchBar from "../components/SearchBar";
 import RecipeModal from '../components/Modal';
 import FavoritesToggle from "../components/FavoritesToggle";
+import useRecipeStore from '../stores/recipeStore.JS';
 
 // Mock API function - replace with your actual API call
 const fetchRecipes = async ({ pageParam = 0 }) => {
@@ -42,10 +43,17 @@ const fetchRecipes = async ({ pageParam = 0 }) => {
 };
 
 const HomePage = () => {
-  const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const [favorites, setFavorites] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [showFavorites, setShowFavorites] = useState(false);
+  // Get state and actions from Zustand store
+  const {
+    favorites,
+    searchQuery,
+    showFavorites,
+    selectedRecipe,
+    setSearchQuery,
+    toggleShowFavorites,
+    setSelectedRecipe,
+    toggleFavorite,
+  } = useRecipeStore();
 
   const {
     data,
@@ -121,6 +129,7 @@ const HomePage = () => {
         </div>
       </div>
 
+      
       {/* Navigation Bar */}
       <div className="bg-white text-black p-3 rounded-md mb-6 shadow-lg">
         <div className="flex justify-start space-x-4">
@@ -136,7 +145,7 @@ const HomePage = () => {
                 <li><Link to="/salads" className="block px-4 py-2 text-sm hover:bg-gray-100">Salads</Link></li>
                 <li><Link to="/salads" className="block px-4 py-2 text-sm hover:bg-gray-100">Side Dishes</Link></li>
                 <li><Link to="/salads" className="block px-4 py-2 text-sm hover:bg-gray-100">Soups</Link></li>
-                <li><Link to="/salads" className="block px-4 py-2 text-sm hover:bg-gray-100">Bread</Link></li>
+    
               </ul>
             </div>
           </div>
@@ -178,12 +187,11 @@ const HomePage = () => {
             <button className="px-4 py-2 bg-white text-black rounded-md hover:bg-gray-200">Cuisines</button>
             <div className="absolute left-0 hidden group-hover:block bg-white text-black shadow-lg rounded mt-2 w-48">
               <ul className="p-2">
-                <li><Link to="/vegetables" className="block px-4 py-2 text-sm hover:bg-gray-100">Mexican</Link></li>
+                <li><Link to="/vegetables" className="block px-4 py-2 text-sm hover:bg-gray-100">Korean</Link></li>
                 <li><Link to="/meats" className="block px-4 py-2 text-sm hover:bg-gray-100">Italian</Link></li>
                 <li><Link to="/spices" className="block px-4 py-2 text-sm hover:bg-gray-100">Chinese</Link></li>
                 <li><Link to="/spices" className="block px-4 py-2 text-sm hover:bg-gray-100">Indian</Link></li>
-                <li><Link to="/spices" className="block px-4 py-2 text-sm hover:bg-gray-100">German</Link></li>
-                <li><Link to="/spices" className="block px-4 py-2 text-sm hover:bg-gray-100">Greek</Link></li>
+                <li><Link to="/spices" className="block px-4 py-2 text-sm hover:bg-gray-100">Japanese</Link></li>
               </ul>
             </div>
           </div>
@@ -194,7 +202,7 @@ const HomePage = () => {
             <div className="absolute left-0 hidden group-hover:block bg-white text-black shadow-lg rounded mt-2 w-48">
               <ul className="p-2">
                 <li><Link to="/vegetables" className="block px-4 py-2 text-sm hover:bg-gray-100">The All Recipe Team</Link></li>
-                <li><Link to="/meats" className="block px-4 py-2 text-sm hover:bg-gray-100">How to add a recipe</Link></li>
+
               </ul>
             </div>
           </div>
@@ -202,13 +210,13 @@ const HomePage = () => {
       </div>
 
       {/* Search, Favorites, Recipes */}
-      <SearchBar searchQuery={searchQuery} onSearchChange={handleSearchChange} />
-      <FavoritesToggle onToggle={() => setShowFavorites(!showFavorites)} showFavorites={showFavorites} />
+      <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+      <FavoritesToggle onToggle={toggleShowFavorites} showFavorites={showFavorites} />
       
       <RecipeList 
         recipes={recipesToDisplay} 
         onClick={handleViewRecipe}
-        onLike={handleLike}
+        onLike={toggleFavorite}
         favorites={favorites}
       />
       
@@ -219,7 +227,7 @@ const HomePage = () => {
       <RecipeModal
         recipe={selectedRecipe}
         onClose={closeModal}
-        onLike={handleLike}
+        onLike={toggleFavorite}
         isFavorite={selectedRecipe ? favorites.includes(selectedRecipe.title) : false}
       />
     </div>

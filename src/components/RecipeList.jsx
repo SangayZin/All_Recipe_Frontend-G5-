@@ -1,4 +1,4 @@
-// components/RecipeList.js
+
 
 import RecipeCard from "./RecipeCard";
 

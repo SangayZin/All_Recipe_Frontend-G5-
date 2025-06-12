@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import HomePage from "./pages/HomePage";
-import Login from "./pages/Login";
+import Login from "./pages/login";
 import Signup from "./pages/Signup";
 
 // Create a QueryClient instance

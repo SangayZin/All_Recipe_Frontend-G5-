@@ -1,67 +1,69 @@
 import React, { useState } from "react";
 
-// I created a Login component using React functional component
-const Login = () => {
-
- // I used useState to manage the email and password fields   
+const LoginForm = ({ onSuccess }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-// I handled the form submission to prevent reload and log the input
-  const handleSubmit = (e) => {
+  const API_BASE_URL = 'http://localhost:8000/api';
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
+    setIsLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+
+      localStorage.setItem('token', data.token);
+      setSuccess("Login successful! Welcome back.");
+      setEmail("");
+      setPassword("");
+
+      if (onSuccess) onSuccess(data);
+    } catch (err) {
+      let msg = err.message.includes("fetch")
+        ? "Unable to connect to server. Please ensure it's running."
+        : err.message;
+      setError(msg);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-// I added left padding (pl-64) and justify-start to shift the form to the right
-    <div className="min-h-screen flex items-center justify-start pl-64">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl">
-        <h2 className="text-3xl font-semibold text-center text-gray-700 mb-6">Log In</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="email" className="block text-gray-600 font-medium mb-2">Email</label>
-            <input
-              type="email"
-              id="email"
-              placeholder="Enter your email"
-              className="w-full sm:w-[350px] lg:w-[400px] border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+    <form onSubmit={handleLogin} className="space-y-6">
+      {error && <div className="text-red-600">{error}</div>}
+      {success && <div className="text-green-600">{success}</div>}
 
-          <div>
-            <label htmlFor="password" className="block text-gray-600 font-medium mb-2">Password</label>
-            <input
-              type="password"
-              id="password"
-              placeholder="Enter your password"
-              className="w-full sm:w-[350px] lg:w-[400px] border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full sm:w-[350px] lg:w-[400px] bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            Log In
-          </button>
-        </form>
-        <div className="text-center mt-4">
-          <p className="text-sm text-gray-500">
-            Don't have an account?{" "}
-            <a href="/signup" className="text-blue-500 hover:underline">Sign Up</a>
-          </p>
-        </div>
+      <div>
+        <label>Email</label>
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full border p-2 rounded" />
       </div>
-    </div>
+      <div>
+        <label>Password</label>
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full border p-2 rounded" />
+      </div>
+      <button type="submit" disabled={isLoading} className="w-full bg-blue-500 text-white p-2 rounded">
+        {isLoading ? "Logging in..." : "Log In"}
+      </button>
+    </form>
   );
 };
 
-export default Login;
+export default LoginForm;

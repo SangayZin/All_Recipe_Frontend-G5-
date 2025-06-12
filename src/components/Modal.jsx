@@ -1,12 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { Heart } from 'lucide-react'; // For the favorite icon
+import { uploadImage } from '../lib/utils'; // Import upload function
 
 // Recommended: Set this in your root index.js instead
-Modal.setAppElement('#root'); 
+Modal.setAppElement('#root');
 
 const RecipeModal = ({ recipe, onClose, onLike, isFavorite }) => {
   if (!recipe) return null;
+
+  const [uploading, setUploading] = useState(false);
+  const [imageUrl, setImageUrl] = useState(recipe.imageUrl || '');
+
+  const handleUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const url = await uploadImage(file);
+      setImageUrl(url);
+      console.log('Image uploaded:', url);
+    } catch (err) {
+      console.error('Upload failed:', err.message);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   return (
     <Modal
@@ -36,13 +56,25 @@ const RecipeModal = ({ recipe, onClose, onLike, isFavorite }) => {
         {/* Image Section */}
         <div className="md:w-1/2 h-64 md:h-96 bg-gray-100 relative">
           <img
-            src={recipe.imageUrl || '/placeholder-food.jpg'}
+            src={imageUrl || '/placeholder-food.jpg'}
             alt={recipe.title}
             className="w-full h-full object-cover"
             onError={(e) => {
               e.target.src = '/placeholder-food.jpg';
             }}
           />
+          {/* Upload Button */}
+          <div className="absolute bottom-2 left-2">
+            <label className="text-sm bg-white px-2 py-1 rounded shadow cursor-pointer">
+              {uploading ? 'Uploading...' : 'Change Image'}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleUpload}
+                className="hidden"
+              />
+            </label>
+          </div>
         </div>
 
         {/* Content Section */}
